@@ -1,0 +1,19 @@
+{
+  "name": "sleep",
+  "main": "views/index.html",
+  "version": "0.0.1",
+  "single-instance": true,
+  "window": {
+    "title": "sleep",
+    "width": 650,
+    "height": 650,
+    "min_width": 650,
+    "min_height": 650,
+    "toolbar": true
+  },
+  "chromium-args": "--child-clean-exit",
+  "dependencies": {
+    "async": "^0.9.0",
+    "moment": "^2.8.3"
+  }
+}
