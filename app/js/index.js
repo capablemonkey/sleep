@@ -106,7 +106,7 @@ function initTray() {
 
 	// TODO: maybe have a giant display for the time that spans 5 menu items
 
-	tray = new gui.Tray({ title: 'S'});
+	tray = new gui.Tray({ icon: 'assets/icon2.png'});
 
 	// init TrayMenu:
 	trayMenu = new gui.Menu();
