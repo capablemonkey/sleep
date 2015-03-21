@@ -49,6 +49,12 @@ function refreshMenu() {
 		// get rid of last event, which is always invalid:
 		sleepEvents.pop();
 		wakeEvents.pop();
+
+		// 'Maintenance Sleep' events are useless... get rid of them:
+		sleepEvents = sleepEvents.filter(function(k) {
+			if (/Maintenance/.test(k.description)) { return false; }
+			return true;
+		});
 		
 		var lastSlept = sleepEvents[sleepEvents.length - 1];
 		var lastWake = wakeEvents[wakeEvents.length - 1];
@@ -57,7 +63,6 @@ function refreshMenu() {
 			reasons:
 
 			Entering Sleep state due to 'Software Sleep pid=68': Using AC (Charge:100%)
-
 		*/
 
 		// figure out reason for sleep:
@@ -74,12 +79,7 @@ function refreshMenu() {
 			if (reasons[r].test(lastSlept.description)) {
 				reason = r;
 			}
-		});
-
-		$('#lastSlept').html(lastSlept.timestamp.format('LT'));
-		$('#lastWoke').html(lastWake.timestamp.format('LT'));
-		$('#sleepDuration').html(lastWake.timestamp.diff(lastSlept.timestamp, 'minutes') + ' minutes');
-		$('#lastSleptReason').html(reason);
+		});	
 
 		trayMenuItems.lastSlept.label = util.format("last slept: %s", lastSlept.timestamp.format('LT'));
 		trayMenuItems.lastWoke.label = util.format("awoke: %s", lastWake.timestamp.format('LT'));
