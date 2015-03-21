@@ -10,7 +10,8 @@
     "min_width": 500,
     "min_height": 200,
     "toolbar": true,
-    "show_in_taskbar" : false
+    "show_in_taskbar": false,
+    "show": false
   },
   "chromium-args": "--child-clean-exit",
   "dependencies": {
