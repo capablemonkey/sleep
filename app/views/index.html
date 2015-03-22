@@ -2,25 +2,18 @@
 <html>
 <head>
     <title>sleep</title>
-    <script src="../js/jquery.min.js"></script>
     <script src="../js/index.js"></script>
     <link rel="stylesheet" href="../css/main.css">
 </head>
 <body>
 	<h1>sleep</h1>
-	<p>Find out when you fell asleep</p>
+  <h4>do you remember when you fell asleep?</h4>
 
-	<div>
-		Your Mac last went to sleep at: <span id="lastSlept"></span> because <span id="lastSleptReason">you closed the lid</span>.
+  <p>see source on <a onclick="gui.Shell.openExternal('https://github.com/capablemonkey/sleep');" href="#">github</a></p>
+	<p>written by <a onclick="gui.Shell.openExternal('https://twitter.com/capable_monkey');" href="#">@capable_monkey</a></p>
 
-		Then, your Mac woke up at: <span id="lastWoke"></span>, which means it slept for <span id="sleepDuration"></span>.
-	</div>
-
-	<div>
-		Previous sleep sessions:
-		<div id="sleepList">
-			
-		</div>
-	</div>
+  <div>
+    <a id="close" href="#" onclick="hideWindow();">close</a>
+  </div>
 </body>
 </html>

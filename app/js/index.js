@@ -15,6 +15,8 @@ var trayMenu;
 var waitingTrayMenu;
 var trayMenuItems = {};
 
+// TODO: try instead: defaults write loginwindow AutoLaunchedApplicationDictionary -array-add '{Path="/Applications/sleep.app";}'
+
 function checkIfRunOnLoginEnabled(callback) {
 	// launchctl list | grep com.capablemonkey.sleepApp
 	exec('launchctl list | grep com.capablemonkey.sleepApp', 
@@ -194,7 +196,11 @@ function initTray() {
 
 	trayMenuItems.about.click = function() {
 		// TODO: some popup here
+		var win = gui.Window.get();
+		win.show();
+		win.focus();
 	};
+	
 	trayMenuItems.quit.click = function() { gui.App.quit(); }
 
 	// check if runonlogin enabled set startup checkbox:
@@ -251,6 +257,11 @@ function parsePMSETOutput(stdout) {
 			timeToSleep: lineBuffer[2]
 		};
 	});
+}
+
+function hideWindow() {
+	var win = gui.Window.get();
+	win.hide();
 }
 
 main();
