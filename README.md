@@ -6,15 +6,15 @@
 
 A little node-webkit / nw.js application that attempts to answer the infamous question of "Whoa... when did I fall asleep?" by telling you when you last closed your Macbook lid or when your Mac last fell asleep after being idle for a while.  
 
-Actually, I lied.  It's not that little.  Because it relies on the nw.js runtime, it's like 98MB.  Sigh.
+Actually, I lied.  It's not that little.  Because it relies on the nw.js runtime, it's like 98MB with the runtime bundled.  Sigh.
 
 Sleep has its own [project page](http://capablemonkey.github.io/sleep/)!
 
-# Download it
+## Download it
 
 [Download the Mac OS X DMG](https://github.com/capablemonkey/sleep/raw/build/webkitbuilds/sleep.dmg).  Only available for 64-bit Macs.
 
-# Playing with the source
+## Playing with the source
 
 ### Installing dependencies
 You'll need to make sure you have nw.js installed.
