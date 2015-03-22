@@ -4,7 +4,7 @@
 
 ![screenshot](https://cloud.githubusercontent.com/assets/1661310/6768116/df5ce18e-d02e-11e4-9332-99717bd20294.png)
 
-A little node-webkit / nw.js application that attempts to answer the infamous question of "Whoa... when did I fall asleep?" by telling you when you last closed your Macbook lid or when your Mac last fell asleep after being idle for a while.  
+A little [node-webkit / nw.js](https://github.com/nwjs/nw.js/) application that attempts to answer the infamous question of "Whoa... when did I fall asleep?" by telling you when you last closed your Macbook lid or when your Mac last fell asleep after being idle for a while.  
 
 Actually, I lied.  It's not that little.  Because it relies on the nw.js runtime, it's like 98MB with the runtime bundled.  Sigh.
 
