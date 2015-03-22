@@ -16,11 +16,81 @@ var trayMenu;
 var waitingTrayMenu;
 var trayMenuItems = {};
 
+function checkIfRunOnLoginEnabled(callback) {
+	// launchctl list | grep com.capablemonkey.sleepApp
+	exec('launchctl list | grep com.capablemonkey.sleepApp', 
+		function(error, stdout, stderr) {
+			if (stderr) { callback(stderr); }
+		  if (error !== null) { 
+		  	// if grep returns return code 1, our launchd job is unloaded
+		  	if (error.code === 1) { return callback(null, false); } 	
+		  	else { return callback(error); }
+		  }
+
+		  // if stdout not empty, launchd job is loaded; else it's unloaded
+		  return callback(null, stdout.length !== 0); 
+		}
+	);
+}
+
+// function pwd(cb) {
+// 	exec('pwd', function(e,so,se) { cb(so) });
+// }
+
+function enableRunOnLogin(callback) {
+	// TODO: first check if exists before moving it
+	// cp com.capablemonkey.sleepApp.plist ~/Library/LaunchAgents/
+	// launchctl load ~/Library/LaunchAgents/com.capablemonkey.sleepApp.plist
+	async.waterfall([
+		function(callback) {
+			exec('cp ./com.capablemonkey.sleepApp.plist ~/Library/LaunchAgents/', 
+				function(error, stdout, stderr) {
+					if (stderr) { callback(stderr); }
+				  if (error !== null) { callback(error); }
+
+				  return callback(null); 
+				}
+			);
+		},
+		function(callback) {
+			exec('launchctl load ~/Library/LaunchAgents/com.capablemonkey.sleepApp.plist', 
+				function(error, stdout, stderr) {
+					if (stderr) { callback(stderr); }
+				  if (error !== null) { callback(error); }
+
+				  return callback(null); 
+				}
+			);
+		}
+
+	], function(err, result) {
+		if (err) {
+			console.error("Exec error", err);
+			return callback(err);
+		}
+
+		return callback(null);
+	});
+}
+
+function disableRunOnLogin(callback) {
+	// launchctl unload ~/Library/LaunchAgents/com.capablemonkey.sleepApp
+	exec('launchctl unload ~/Library/LaunchAgents/com.capablemonkey.sleepApp.plist', 
+		function(error, stdout, stderr) {
+			if (stderr) { callback(stderr); }
+		  if (error !== null) { callback(error); }
+
+		  // if stdout empty, successfully unloaded
+		  return callback(stdout.length === 0 ? null : true); 
+		}
+	);
+}
+
 function getSleepEvents(callback) {
 	exec('pmset -g log | grep "Entering Sleep"',
 	  function (error, stdout, stderr) {
-	  	if (stderr) { console.log('stderr' + stderr); }
-		  if (error !== null) { console.log('exec error: ' + error); }
+	  	if (stderr) { console.error('stderr' + stderr); }
+		  if (error !== null) { console.error('exec error: ' + error); }
 
 		  sleepEvents = parsePMSETOutput(stdout);
 		  callback();
@@ -30,8 +100,8 @@ function getSleepEvents(callback) {
 function getWakeEvents(callback) {
 	child = exec('pmset -g log | grep "Wake .* due to"', 
 		function(error, stdout, stderr) {
-			if (stderr) { console.log('stderr' + stderr); }
-		  if (error !== null) { console.log('exec error: ' + error); }
+			if (stderr) { console.error('stderr' + stderr); }
+		  if (error !== null) { console.error('exec error: ' + error); }
 
 		  wakeEvents = parsePMSETOutput(stdout);
 		  callback();
@@ -117,7 +187,7 @@ function initTray() {
 	trayMenuItems.reasonLabel = new gui.MenuItem({type: 'normal', label: 'reason for sleep:', enabled: false})
 	trayMenuItems.reason = new gui.MenuItem({ type: 'normal', label: 'ugh', enabled: false });
 	trayMenuItems.sep2 = new gui.MenuItem({type: 'separator'});
-	trayMenuItems.startup = new gui.MenuItem({type: 'checkbox', label: 'run on startup?'});
+	trayMenuItems.startup = new gui.MenuItem({type: 'checkbox', label: 'run on startup?', checked: false});
 	trayMenuItems.about = new gui.MenuItem({type: 'normal', label: 'about'});
 	trayMenuItems.about.click = function() {
 		// TODO: some popup here
@@ -125,6 +195,28 @@ function initTray() {
 	trayMenuItems.quit = new gui.MenuItem({ type: 'normal', label: 'quit', enabled: true });
 	trayMenuItems.quit.click = function() { gui.App.quit(); }
 
+	// check if runonlogin enabled set startup checkbox:
+	checkIfRunOnLoginEnabled(function(err, enabled) {
+		if (err) { console.error('exec error, ', err); }
+		trayMenuItems.startup.checked = enabled; 
+	});
+
+	// handle startup MenuItem click:
+	trayMenuItems.startup.on('click', function() {
+		checkIfRunOnLoginEnabled(function(error, enabled) {
+			if (enabled) {
+				disableRunOnLogin(function(err) {
+					if (err === null) { trayMenuItems.startup.checked = false; }
+				});
+			} else {
+				enableRunOnLogin(function(err) {
+					if (err === null) { trayMenuItems.startup.checked = true; }
+				});
+			}
+		});
+	});
+
+	// add MenuItems to the trayMenu
 	Object.keys(trayMenuItems).forEach(function(key) {
 		trayMenu.append(trayMenuItems[key]);
 	});
