@@ -145,7 +145,7 @@ function refreshMenu() {
 			}
 		});	
 
-		trayMenuItems.lastSlept.label = util.format("last slept: %s", lastSlept.timestamp.format('LT'));
+		trayMenuItems.lastSlept.label = util.format("fell asleep: %s", lastSlept.timestamp.format('LT'));
 		trayMenuItems.lastWoke.label = util.format("awoke: %s", lastWake.timestamp.format('LT'));
 		trayMenuItems.duration.label = util.format("slept %s mins.", lastWake.timestamp.diff(lastSlept.timestamp, 'minutes'));
 		trayMenuItems.reason.label = reason;
