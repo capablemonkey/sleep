@@ -29,6 +29,17 @@ To build, do from the *root* directory of the repo:
 
 It'll build sleep.app, targeting OS X 32-bit and 64-bit.  You'll find the resulting .app files in `/webkitbuilds/sleep/`.
 
+#### Building the DMG
+Once the app's been packaged, we'll want to build the DMG.  Make sure you have `appdmg` installed:
+
+`npm install -g appdmg`
+
+Then, do:
+
+`appdmg dmgConfig.json webkitbuilds/sleep.dmg`
+
+And your DMG will end up in webkitbuilds/.  In the future, consider adding this as a grunt task in the gruntfile.
+
 ## todo
 
 - create dmg to prompt user to drag .app to applications.
