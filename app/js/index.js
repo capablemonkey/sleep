@@ -3,7 +3,6 @@
 var async = require('async');
 var moment = require('moment');
 var exec = require('child_process').exec;
-var child;
 var util = require('util');
 
 var sleepEvents = [];
@@ -33,12 +32,7 @@ function checkIfRunOnLoginEnabled(callback) {
 	);
 }
 
-// function pwd(cb) {
-// 	exec('pwd', function(e,so,se) { cb(so) });
-// }
-
 function enableRunOnLogin(callback) {
-	// TODO: first check if exists before moving it
 	// cp com.capablemonkey.sleepApp.plist ~/Library/LaunchAgents/
 	// launchctl load ~/Library/LaunchAgents/com.capablemonkey.sleepApp.plist
 	async.waterfall([
@@ -98,7 +92,7 @@ function getSleepEvents(callback) {
 }
 
 function getWakeEvents(callback) {
-	child = exec('pmset -g log | grep "Wake .* due to"', 
+	exec('pmset -g log | grep "Wake .* due to"', 
 		function(error, stdout, stderr) {
 			if (stderr) { console.error('stderr' + stderr); }
 		  if (error !== null) { console.error('exec error: ' + error); }
@@ -173,26 +167,34 @@ function main() {
 }
 
 function initTray() {
-
 	// TODO: maybe have a giant display for the time that spans 5 menu items
 
+	// add tray icon to statusbar:
 	tray = new gui.Tray({ icon: 'assets/icon2.png'});
 
-	// init TrayMenu:
+	/*
+	 *	create the main tray menu and its items
+	 */
+
 	trayMenu = new gui.Menu();
 	trayMenuItems.lastSlept = new gui.MenuItem({ type: 'normal', label: 'ugh', enabled: false });
 	trayMenuItems.lastWoke = new gui.MenuItem({ type: 'normal', label: 'ugh', enabled: false });
 	trayMenuItems.duration = new gui.MenuItem({ type: 'normal', label: 'ugh', enabled: false });
 	trayMenuItems.sep1 = new gui.MenuItem({type: 'separator'});
-	trayMenuItems.reasonLabel = new gui.MenuItem({type: 'normal', label: 'reason for sleep:', enabled: false})
+	trayMenuItems.reasonLabel = new gui.MenuItem({type: 'normal', label: 'reason for sleep:', enabled: false});
 	trayMenuItems.reason = new gui.MenuItem({ type: 'normal', label: 'ugh', enabled: false });
 	trayMenuItems.sep2 = new gui.MenuItem({type: 'separator'});
 	trayMenuItems.startup = new gui.MenuItem({type: 'checkbox', label: 'run on startup?', checked: false});
 	trayMenuItems.about = new gui.MenuItem({type: 'normal', label: 'about'});
+	trayMenuItems.quit = new gui.MenuItem({ type: 'normal', label: 'quit', enabled: true });
+	
+	/*
+	 *	Logic + Event handling for MenuItems
+	 */
+
 	trayMenuItems.about.click = function() {
 		// TODO: some popup here
 	};
-	trayMenuItems.quit = new gui.MenuItem({ type: 'normal', label: 'quit', enabled: true });
 	trayMenuItems.quit.click = function() { gui.App.quit(); }
 
 	// check if runonlogin enabled set startup checkbox:
@@ -201,8 +203,9 @@ function initTray() {
 		trayMenuItems.startup.checked = enabled; 
 	});
 
-	// handle startup MenuItem click:
-	trayMenuItems.startup.on('click', function() {
+	trayMenuItems.startup.click = function() {
+		// TODO: tell user to move the app to /Applications if they want it to run on login
+		// or, modify the plist file to point to the pwd
 		checkIfRunOnLoginEnabled(function(error, enabled) {
 			if (enabled) {
 				disableRunOnLogin(function(err) {
@@ -214,16 +217,20 @@ function initTray() {
 				});
 			}
 		});
-	});
+	};
 
-	// add MenuItems to the trayMenu
+	// add all MenuItems to the trayMenu
 	Object.keys(trayMenuItems).forEach(function(key) {
 		trayMenu.append(trayMenuItems[key]);
 	});
 
-	// init Waiting Tray menu, which is displayed as we fetch data
+	/*
+	 *	Create Waiting Tray menu, which is displayed as we fetch data
+	 */
+
 	waitingTrayMenu = new gui.Menu();
 	waitingTrayMenu.append(new gui.MenuItem({type: 'normal', label: 'fetching...', enabled: false}));
+	
 	var quit = new gui.MenuItem({ type: 'normal', label: 'quit', enabled: true });
 	quit.click = function() { gui.App.quit(); }
 	waitingTrayMenu.append(quit);
@@ -247,6 +254,3 @@ function parsePMSETOutput(stdout) {
 }
 
 main();
-
-// TODO: figure out how to make this run on login
-// TODO: provide a checkbox menuitem to run on login
