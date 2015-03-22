@@ -28,3 +28,7 @@ To build, do from the *root* directory of the repo:
 `grunt nodewebkit`
 
 It'll build sleep.app, targeting OS X 32-bit and 64-bit.  You'll find the resulting .app files in `/webkitbuilds/sleep/`.
+
+## todo
+
+- create dmg to prompt user to drag .app to applications.
