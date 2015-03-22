@@ -50,4 +50,4 @@ And your DMG will end up in webkitbuilds/.  In the future, consider adding this 
 
 ## todo
 
-- create dmg to prompt user to drag .app to applications.
+- right not it'll refresh every 5 minutes.  But, it'd be nicer if it could detect when the machine comes out of sleep and refresh

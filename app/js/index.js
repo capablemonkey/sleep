@@ -156,7 +156,7 @@ function refreshMenu() {
 	});
 }
 
-// TODO: refresh this periodically, make a button to refresh this.
+// TODO: make a button to refresh 
 
 function main() {
 	// Set up UI elements
@@ -169,7 +169,7 @@ function main() {
 }
 
 function initTray() {
-	// TODO: maybe have a giant display for the time that spans 5 menu items
+	// TODO: maybe have a giant display for the time that spans 5 menu items; make the time more prominent
 
 	// add tray icon to statusbar:
 	tray = new gui.Tray({ icon: 'assets/icon2.png'});
@@ -186,7 +186,7 @@ function initTray() {
 	trayMenuItems.reasonLabel = new gui.MenuItem({type: 'normal', label: 'reason for sleep:', enabled: false});
 	trayMenuItems.reason = new gui.MenuItem({ type: 'normal', label: 'ugh', enabled: false });
 	trayMenuItems.sep2 = new gui.MenuItem({type: 'separator'});
-	trayMenuItems.startup = new gui.MenuItem({type: 'checkbox', label: 'run on startup?', checked: false});
+	trayMenuItems.startup = new gui.MenuItem({type: 'checkbox', label: 'run on login?', checked: false});
 	trayMenuItems.about = new gui.MenuItem({type: 'normal', label: 'about'});
 	trayMenuItems.quit = new gui.MenuItem({ type: 'normal', label: 'quit', enabled: true });
 	
@@ -195,7 +195,6 @@ function initTray() {
 	 */
 
 	trayMenuItems.about.click = function() {
-		// TODO: some popup here
 		var win = gui.Window.get();
 		win.show();
 		win.focus();
@@ -249,7 +248,7 @@ function parsePMSETOutput(stdout) {
 	var lineBuffer;
 	var timestampBuffer;
 	return stdout.split('\n').map(function(line) {
-		lineBuffer = line.split('\t');		// TODO: figure out how expensive it is to keep delcaring var for each line
+		lineBuffer = line.split('\t');	
 		timestampBuffer = line.split(' ');
 		return {
 			timestamp: moment(new Date(timestampBuffer.slice(0, 3).join(' '))),
