@@ -1,5 +1,7 @@
 # sleep
 
+![screenshot](https://cloud.githubusercontent.com/assets/1661310/6768116/df5ce18e-d02e-11e4-9332-99717bd20294.png)
+
 Attempts to answer the infamous question of "Whoa... when did I fall asleep?" by telling you when you last closed your Macbook lid or when your Mac last fell asleep after being idle for a while.
 
 # Getting started
