@@ -10,6 +10,7 @@ module.exports = function (grunt) {
       options: {
           platforms: ['osx'],
           buildDir: './webkitbuilds', // Where the build version of my node-webkit app is saved
+          macIcns: './app/assets/sleepicon.icns'
       },
       src: ['./app/**/*'] // Your node-webkit app
     },
