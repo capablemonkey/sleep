@@ -99,10 +99,9 @@ function initTray() {
 	trayMenuItems.reason = new gui.MenuItem({ type: 'normal', label: 'ugh', enabled: false });
 	trayMenuItems.sep2 = new gui.MenuItem({type: 'separator'});
 	trayMenuItems.startup = new gui.MenuItem({type: 'checkbox', label: 'run on login?', checked: false});
+	trayMenuItems.refresh = new gui.MenuItem({type: 'normal', label: 'refresh'});
 	trayMenuItems.about = new gui.MenuItem({type: 'normal', label: 'about'});
 	trayMenuItems.quit = new gui.MenuItem({ type: 'normal', label: 'quit', enabled: true });
-
-	// TODO: make a button to refresh 
 	
 	/*
 	 *	Logic + Event handling for MenuItems
@@ -137,6 +136,7 @@ function initTray() {
 			}
 		});
 	};
+	trayMenuItems.refresh.click = function() { refreshMenu(); }
 
 	// add all MenuItems to the trayMenu
 	Object.keys(trayMenuItems).forEach(function(key) {
