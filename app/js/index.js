@@ -136,6 +136,7 @@ function initTray() {
 			}
 		});
 	};
+
 	trayMenuItems.refresh.click = function() { refreshMenu(); }
 
 	// add all MenuItems to the trayMenu
